@@ -1,28 +1,32 @@
-CFLAGS = -Wall -fpic -coverage -lm
+#CFLAGS = -Wall -fpic -coverage -lm
+CFLAGS = 
+CC = cl
+DBG = /Zi
 
 rngs.o: rngs.h rngs.c
-	gcc -c rngs.c -g  $(CFLAGS)
+	$(CC) -c rngs.c $(DBG) $(CFLAGS) /Fo: $@
 
 dominion.o: dominion.h dominion.c rngs.o
-	gcc -c dominion.c -g  $(CFLAGS)
+	$(CC) -c dominion.c $(DBG) $(CFLAGS) /Fo: $@
 
-playdom: dominion.o playdom.c
-	gcc -o playdom playdom.c -g dominion.o rngs.o $(CFLAGS)
+playdom.exe: dominion.o playdom.c
+	$(CC) playdom.c $(DBG) dominion.o rngs.o $(CFLAGS)
+
 #To run playdom you need to entere: ./playdom <any integer number> like ./playdom 10*/
 testDrawCard: testDrawCard.c dominion.o rngs.o
-	gcc  -o testDrawCard -g  testDrawCard.c dominion.o rngs.o $(CFLAGS)
+	$(CC) $(DBG)  testDrawCard.c dominion.o rngs.o $(CFLAGS)
 
 badTestDrawCard: badTestDrawCard.c dominion.o rngs.o
-	gcc -o badTestDrawCard -g  badTestDrawCard.c dominion.o rngs.o $(CFLAGS)
+	$(CC) $(DBG)  badTestDrawCard.c dominion.o rngs.o $(CFLAGS)
 
 testBuyCard: testDrawCard.c dominion.o rngs.o
-	gcc -o testDrawCard -g  testDrawCard.c dominion.o rngs.o $(CFLAGS)
+	$(CC) $(DBG)  testDrawCard.c dominion.o rngs.o $(CFLAGS)
 
 testAll: dominion.o testSuite.c
-	gcc -o testSuite testSuite.c -g  dominion.o rngs.o $(CFLAGS)
+	$(CC) testSuite.c $(DBG)  dominion.o rngs.o $(CFLAGS)
 
 interface.o: interface.h interface.c
-	gcc -c interface.c -g  $(CFLAGS)
+	$(CC) -c interface.c $(DBG)  $(CFLAGS) /Fo: $@
 
 runtests: testDrawCard 
 	./testDrawCard &> unittestresult.out
@@ -31,9 +35,9 @@ runtests: testDrawCard
 
 
 player: player.c interface.o
-	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)
+	$(CC) player.c $(DBG)  dominion.o rngs.o interface.o $(CFLAGS)
 
-all: playdom player testDrawCard testBuyCard badTestDrawCard
+all: playdom.exe player testDrawCard testBuyCard badTestDrawCard
 
 clean:
 	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe
