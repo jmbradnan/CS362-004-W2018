@@ -667,7 +667,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   switch( card ) 
     {
     case adventurer:
-		return adverturerCard(&state, cardDrawn, temphand, currentPlayer, drawntreasure);
+		return adverturerCard(state, cardDrawn, temphand, currentPlayer, drawntreasure);
 			
     case council_room:
       //+4 Cards
@@ -1186,13 +1186,13 @@ int feastCard(int currentPlayer, struct gameState *state, int temphand[MAX_HAND]
 int villageCard(int currentPlayer, struct gameState *state, int handPos) {
 
 	//+1 Card
-	drawCard(currentPlayer, ++state);
+	drawCard(currentPlayer, state);
 
 	//+2 Actions
 	state->numActions = state->numActions + 2;
 
 	//discard played card from hand
-	discardCard(handPos, currentPlayer, state, 0);
+	discardCard(handPos, currentPlayer, state, 1);
 	return 0;
 
 }
@@ -1243,7 +1243,7 @@ int adverturerCard(struct gameState *state, int cardDrawn, int temphand[MAX_HAND
 				drawntreasure++;
 			else {
 				temphand[z] = cardDrawn;
-				state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
+				state->handCount[currentPlayer]; //this should just remove the top card (the most recently drawn one).
 				z++;
 			}
 		}
