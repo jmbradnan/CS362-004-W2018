@@ -1,43 +1,26 @@
-#CFLAGS = -Wall -fpic -coverage -lm
+#CFLAGS = -Wall -fpic -coverage -lm -std=c99
 CFLAGS = 
 CC = cl
 DBG = /Zi
 
-rngs.o: rngs.h rngs.c
-	$(CC) -c rngs.c $(DBG) $(CFLAGS) /Fo: $@
+default: unittest1.exe 
 
-dominion.o: dominion.h dominion.c rngs.o
-	$(CC) -c dominion.c $(DBG) $(CFLAGS) /Fo: $@
+unittest: unittestresults.out 
 
-playdom.exe: dominion.o playdom.c
-	$(CC) playdom.c $(DBG) dominion.o rngs.o $(CFLAGS)
+all: unittest1.exe unittestresults.out
 
-#To run playdom you need to entere: ./playdom <any integer number> like ./playdom 10*/
-testDrawCard: testDrawCard.c dominion.o rngs.o
-	$(CC) $(DBG)  testDrawCard.c dominion.o rngs.o $(CFLAGS)
+unittest1.exe: unittest1.c dominion.c rngs.c
+	$(CC) -o unittest1 dominion.c rngs.c unittest1.c $(CFLAGS) $(DBG)
 
-badTestDrawCard: badTestDrawCard.c dominion.o rngs.o
-	$(CC) $(DBG)  badTestDrawCard.c dominion.o rngs.o $(CFLAGS)
-
-testBuyCard: testDrawCard.c dominion.o rngs.o
-	$(CC) $(DBG)  testDrawCard.c dominion.o rngs.o $(CFLAGS)
-
-testAll: dominion.o testSuite.c
-	$(CC) testSuite.c $(DBG)  dominion.o rngs.o $(CFLAGS)
-
-interface.o: interface.h interface.c
-	$(CC) -c interface.c $(DBG)  $(CFLAGS) /Fo: $@
-
-runtests: testDrawCard 
-	./testDrawCard &> unittestresult.out
-	gcov dominion.c >> unittestresult.out
-	cat dominion.c.gcov >> unittestresult.out
-
-
-player: player.c interface.o
-	$(CC) player.c $(DBG)  dominion.o rngs.o interface.o $(CFLAGS)
-
-all: playdom.exe player testDrawCard testBuyCard badTestDrawCard
-
+unittestresults.out: unittest1.exe
+	echo "Result for Dominion unit tests and card tests:" > unittestresults.out
+	
+	echo "unittest1.c:" >> unittestresults.out
+	
+	unittest1 >> unittestresults.out
+	
 clean:
-	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe
+	erase unittestresults.out
+
+cleanall: 
+	erase unittestresults.out unittest1.exe *.gcda *.gcno *.gcov
