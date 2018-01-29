@@ -22,35 +22,44 @@ int main() {
     int numPlayer = 2;
 	int maxToFlag = 4;
 	int toFlag;
-	int supplyPos;
+	int supplyPos=0;
     int p, r, handCount;
 	int testsPassed = 0;
-	int supplyCount;
+	int previousSupplyCount, previousDiscardCount, postSupplyCount, postDiscardCount;
     int k[10] = {adventurer, council_room, feast, gardens, mine
                , remodel, smithy, village, baron, great_hall};
     struct gameState G;
     int maxHandCount = 5;
 
-    printf ("TESTING gainCard():\n");
+    printf ("Result for running gainCard() tests:\n");
     for (p = 0; p < numPlayer; p++)
     {
             for (toFlag = 0; toFlag <= maxToFlag; toFlag++)	
             {
-				printf("Test player %d with %d toFlag.\n", p, handCount, toFlag);
                 memset(&G, 23, sizeof(struct gameState));   // clear the game state
                 r = initializeGame(numPlayer, k, seed, &G); // initialize a new game
-				supplyCount = sizeOfSupplyCount(&G);
-				printf("Supply count = %d.", supplyCount);
+				//supplyCount = sizeOfSupplyCount(&G);
+				previousSupplyCount = G.supplyCount[supplyPos];
+				previousDiscardCount = G.discardCount[p];
                 G.handCount[p] = handCount;                 // set the number of cards on hand
 				gainCard(supplyPos, &G, toFlag, p);
+				postSupplyCount = G.supplyCount[supplyPos];
+				postDiscardCount = G.discardCount[p];
+				supplyPos++;
 				if (toFlag == 0) {
-					
+					if ((postDiscardCount == previousDiscardCount + 1) && (postSupplyCount == previousSupplyCount - 1)) {
+						printf("gainCard():  PASS when add to discard performed with player %d\n", p);
+					}
+					else {
+						printf("gainCard():  FAIL when add to discard performed\n");
+						if (postDiscardCount == previousDiscardCount + 1) { printf("\t Discard Count should be %d, and it is %d.\n", previousDiscardCount + 1, postDiscardCount); }
+						if (postSupplyCount == previousSupplyCount - 1) { printf("\t Supply Count should be %d, and it is %d.\n", previousSupplyCount - 1, postSupplyCount); }
+					}
 				}
 			}
 	}
-    printf("All tests passed!\n");
-    //return 0;
-	return testsPassed;
+	testsPassed == 0 ? printf("All tests passed!\n") : printf("All tests did not pass!\n");
+		return 0;
 }
 
 int sizeOfSupplyCount(struct gameState *state) {
