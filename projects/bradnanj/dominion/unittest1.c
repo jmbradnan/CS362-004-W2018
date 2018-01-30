@@ -1,9 +1,8 @@
 /* -----------------------------------------------------------------------
- * Demonstration of how to write unit tests for dominion-base
+ * Unit tests for dominion-base game --> dominion.c
  * Include the following lines in your makefile:
  *
- * testUpdateCoins: testUpdateCoins.c dominion.o rngs.o
- *      gcc -o testUpdateCoins -g  testUpdateCoins.c dominion.o rngs.o $(CFLAGS)
+ * This set of tests validates the gainCard method.
  * -----------------------------------------------------------------------
  */
 
@@ -23,7 +22,7 @@ int main() {
 	int maxToFlag = 3;
 	int toFlag;
 	int supplyPos=0;
-    int p, r, handCount;
+    int p, r;
 	int testsPassed = 0;
 	int previousSupplyCount, previousDiscardCount, postSupplyCount, postDiscardCount, previousHandCount, postHandCount, previousDeckCount, postDeckCount;
     int k[10] = {adventurer, council_room, feast, gardens, mine
@@ -31,7 +30,7 @@ int main() {
     struct gameState G;
     int maxHandCount = 5;
 
-    printf ("Result for running gainCard() tests:\n");
+    printf ("Results for running gainCard() tests:\n");
     for (p = 0; p < numPlayer; p++)
     {
             for (toFlag = 0; toFlag <= maxToFlag; toFlag++)	
