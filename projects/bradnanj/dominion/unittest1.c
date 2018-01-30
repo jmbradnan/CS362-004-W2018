@@ -20,7 +20,7 @@ int main() {
     int i;
     int seed = 1000;
     int numPlayer = 2;
-	int maxToFlag = 4;
+	int maxToFlag = 3;
 	int toFlag;
 	int supplyPos=0;
     int p, r, handCount;
@@ -44,7 +44,7 @@ int main() {
 				previousDiscardCount = G.discardCount[p];
 				previousHandCount = G.handCount[p];
 				previousDeckCount = G.deckCount[p];
-                //G.handCount[p] = handCount;                 // set the number of cards on hand
+
 				gainCard(supplyPos, &G, toFlag, p);
 
 				// Get state property counts after to gainCard call
@@ -61,6 +61,7 @@ int main() {
 						printf("gainCard():  PASS when add to discard performed with player %d\n", p);
 					}
 					else {
+						testsPassed = 1;
 						printf("gainCard():  FAIL when add to discard performed\n");
 						if (postDiscardCount != previousDiscardCount + 1) { printf("\t Discard Count should be %d, and it is %d.\n", previousDiscardCount + 1, postDiscardCount); }
 						if (postSupplyCount != previousSupplyCount - 1) { printf("\t Supply Count should be %d, and it is %d.\n", previousSupplyCount - 1, postSupplyCount); }
@@ -72,6 +73,7 @@ int main() {
 						printf("gainCard():  PASS when add to deck performed with player %d\n", p);
 					}
 					else {
+						testsPassed = 1;
 						printf("gainCard():  FAIL when add to deck performed\n");
 						if (postDeckCount != previousDeckCount + 1) { printf("\t Deck Count should be %d, and it is %d.\n", previousDeckCount + 1, postDeckCount); }
 						if (postDiscardCount != previousDiscardCount) { printf("\t Discard Count should be %d, and it is %d.\n", previousDiscardCount, postDiscardCount); }
@@ -79,10 +81,35 @@ int main() {
 					}
 				}
 				// toFlag = 2 : add to hand
-
+				if (toFlag == 2) {
+					if ((postHandCount == previousHandCount + 1) && (previousDiscardCount == postDiscardCount) && (postSupplyCount == previousSupplyCount - 1)) {
+						printf("gainCard():  PASS when add to hand performed with player %d\n", p);
+					}
+					else {
+						testsPassed = 1;
+						printf("gainCard():  FAIL when add to hand performed\n");
+						if (postHandCount != previousHandCount + 1) { printf("\t Hand Count should be %d, and it is %d.\n", previousHandCount + 1, postHandCount); }
+						if (postDiscardCount != previousDiscardCount) { printf("\t Discard Count should be %d, and it is %d.\n", previousDiscardCount, postDiscardCount); }
+						if (postSupplyCount != previousSupplyCount - 1) { printf("\t Supply Count should be %d, and it is %d.\n", previousSupplyCount - 1, postSupplyCount); }
+					}
+				}
+				//this is not a supported toFlag and should fail gracefully - without changing anything
+				if (toFlag == 3) {
+					if ((postHandCount == previousHandCount) && (postDiscardCount == previousDiscardCount) && (postSupplyCount == previousSupplyCount) && (postDeckCount == previousDeckCount)) {
+						printf("gainCard():  PASS when invalid param passed to gainCard() for player %d\n", p);
+					}
+					else {
+						testsPassed = 1;
+						printf("gainCard():  FAIL when invalid param (toFlag = 3) passed to gainCard() for player %d\n", p);
+						if (postHandCount != previousHandCount) { printf("\t Hand Count should be %d, and it is %d.\n", previousHandCount, postHandCount); }
+						if (postDiscardCount != previousDiscardCount) { printf("\t Discard Count should be %d, and it is %d.\n", previousDiscardCount, postDiscardCount); }
+						if (postSupplyCount != previousSupplyCount) { printf("\t Supply Count should be %d, and it is %d.\n", previousSupplyCount, postSupplyCount); }
+						if (postDeckCount != previousDeckCount) { printf("\t Deck Count should be %d, and it is %d.\n", previousDeckCount, postDeckCount); }
+					}
+				}
 			}
 	}
-	testsPassed == 0 ? printf("All tests passed!\n") : printf("All tests did not pass!\n");
+	testsPassed == 0 ? printf("All tests passed!\n") : printf("All tests did not pass!  Please review the test output for more details.\n");
 		return 0;
 }
 
