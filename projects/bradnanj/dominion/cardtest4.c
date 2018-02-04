@@ -40,29 +40,30 @@ int main() {
 	initializeGame(numPlayers, k, seed, &G);
 
 	printf("Testing %s card\n", TESTCARD);
-	printf("Test 1: Trash copper and gain silver.\n");
+	printf("Test 1: Trash copper and gain silver.  Discard a copper.\n");
 
 	// copy the game state to a test case
 	memcpy(&testG, &G, sizeof(struct gameState));
+	testG.hand[p][0] = 4;  //ensure handPos contains a copper
 	choice1 = 4;
 	choice2 = 5;
-	initialCopperCount = numOfCoins(4, &testG);
-	initialSilverCount = numOfCoins(4, &testG);
-	oldDiscardCount = testG.discardCount[p];
+	initialCopperCount = numOfCoins(4, &testG, p);
+	initialSilverCount = numOfCoins(5, &testG, p);
+	oldPlayedCount = testG.playedCardCount[p];
 	oldHandCount = testG.handCount[p];
 	result = cardEffect(mine, choice1, choice2, choice3, &testG, handpos, &bonus);
-	finalCopperCount = numOfCoins(4, &testG);
-	finalSilverCount = numOfCoins(5, &testG);
+	finalCopperCount = numOfCoins(4, &testG, p);
+	finalSilverCount = numOfCoins(5, &testG, p);
 
-	if ( (result == 0) && (testG.discardCount[p] == oldDiscardCount - 1) && 
-		(testG.handCount[p] == oldHandCount -1) && (initialCopperCount == finalCopperCount + 1) && 
+	if ( (result == 0) && (testG.playedCardCount[p] == oldPlayedCount - 2) &&
+		(testG.handCount[p] == oldHandCount -1) && (initialCopperCount == finalCopperCount + 2) && 
 		(initialSilverCount == finalSilverCount + 1) ) {
 		printf("mineCard():  PASS testing trash copper and gain silver.\n");
 	}
 	else {
 		testsPassed = -1;
 		printf("mineCard():  FAIL testing trash copper and gain silver.\n");
-		if (testG.discardCount[p] == oldDiscardCount - 1) {
+		if (testG.playedCardCount[p] != oldPlayedCount - 2) {
 			printf("\t discardCount = %d, expected = %d\n", testG.discardCount[p], oldDiscardCount - 1);
 		}
 	}
@@ -73,8 +74,18 @@ int main() {
 	return 0;
 }
 
-int numOfCoins(int coin, struct gameState *state) {
+int numOfCoins(int coin, struct gameState *state, int p) {
 	int count = 0;
+	int i;
+
+	for (i = 0; i < MAX_HAND; i++) {
+		if (state->hand[p][i] == coin) {
+			count++;
+		}
+		if (state->hand[p][i] == -1) {
+			break;
+		}
+	}
 
 	return count;
 }
