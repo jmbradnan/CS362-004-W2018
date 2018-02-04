@@ -27,7 +27,7 @@ int main() {
 	int i, j, m;
 	int handpos = 0, choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0;
 	int initialCopperCount, initialSilverCount, initialGoldCount, finalCopperCount, finalSilverCount, finalGoldCount;
-	int oldDiscardCount, oldHandCount;
+	int oldPlayedCount, oldHandCount;
 	int result = -1;
 	int seed = 1000;
 	int numPlayers = 2;
@@ -49,22 +49,22 @@ int main() {
 	choice2 = 5;
 	initialCopperCount = numOfCoins(4, &testG, p);
 	initialSilverCount = numOfCoins(5, &testG, p);
-	oldPlayedCount = testG.playedCardCount[p];
+	oldPlayedCount = testG.playedCardCount;
 	oldHandCount = testG.handCount[p];
 	result = cardEffect(mine, choice1, choice2, choice3, &testG, handpos, &bonus);
 	finalCopperCount = numOfCoins(4, &testG, p);
 	finalSilverCount = numOfCoins(5, &testG, p);
 
-	if ( (result == 0) && (testG.playedCardCount[p] == oldPlayedCount - 2) &&
+	if ( (result == 0) && (testG.playedCardCount == oldPlayedCount + 2) &&
 		(testG.handCount[p] == oldHandCount -1) && (initialCopperCount == finalCopperCount + 2) && 
-		(initialSilverCount == finalSilverCount + 1) ) {
+		(initialSilverCount + 1 == finalSilverCount) ) {
 		printf("mineCard():  PASS testing trash copper and gain silver.\n");
 	}
 	else {
 		testsPassed = -1;
 		printf("mineCard():  FAIL testing trash copper and gain silver.\n");
-		if (testG.playedCardCount[p] != oldPlayedCount - 2) {
-			printf("\t discardCount = %d, expected = %d\n", testG.discardCount[p], oldDiscardCount - 1);
+		if (testG.playedCardCount != oldPlayedCount + 2) {
+			printf("\t discardCount = %d, expected = %d\n", testG.playedCardCount, oldPlayedCount + 2);
 		}
 	}
 
