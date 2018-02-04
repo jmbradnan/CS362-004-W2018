@@ -1,28 +1,20 @@
-/*
-* cardtest4.c
+/* -----------------------------------------------------------------------
+* Unit tests for dominion-base game --> dominion.c
 *
-
+* This set of tests validates the Smithy card.
+* -----------------------------------------------------------------------
 */
-
-/*
-* Include the following lines in your makefile:
-*
-* cardtest4: cardtest4.c dominion.o rngs.o
-*      gcc -o cardtest1 -g  cardtest4.c dominion.o rngs.o $(CFLAGS)
-*/
-
 
 #include "dominion.h"
 #include "dominion_helpers.h"
 #include <string.h>
 #include <stdio.h>
-#include <assert.h>
 #include "rngs.h"
 #include <stdlib.h>
 
 #define TESTCARD "smithy"
 
-int main() {
+int cardtest1() {
 	int newCards = 0;
 	int discarded;
 	int testsPassed = 0;
@@ -41,9 +33,7 @@ int main() {
 
 	printf("----------------- Testing Card: %s ----------------\n", TESTCARD);
 
-	// ----------- TEST 1: choice1 = 1 = +2 cards --------------
-	printf("Test play Smithy card\n");
-
+	printf("Test 1: Basic smithy test - gain 3 cards.\n");
 	// copy the game state to a test case
 	memcpy(&testG, &G, sizeof(struct gameState));
 	choice1 = 1;
@@ -53,18 +43,17 @@ int main() {
 	discarded = 1;
 
 	if (testG.handCount[thisPlayer] == G.handCount[thisPlayer] + newCards - discarded) {
-		printf("SmithyCard():  PASS\n");
+		printf("SmithyCard():  PASS Basic smithy test - gain 3 cards.\n");
 	}
 	else {
 		testsPassed = -1;
-		printf("SmithyCard():  FAIL\n");
+		printf("SmithyCard():  FAIL Basic smithy test - gain 3 cards.\n");
 		if (testG.handCount[thisPlayer] != G.handCount[thisPlayer] + newCards - discarded) { 
 			printf("\t hand count = %d, expected = %d\n", testG.handCount[thisPlayer], G.handCount[thisPlayer] + newCards - discarded);
 		}
 	}
 	
 	testsPassed == 0 ? printf("All tests passed!\n") : printf("All tests did not pass!  Please review the test output for more details.\n");
-
 
 	return 0;
 }

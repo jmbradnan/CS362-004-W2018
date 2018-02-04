@@ -1,28 +1,20 @@
-/*
-* cardtest4.c
+/* -----------------------------------------------------------------------
+* Unit tests for dominion-base game --> dominion.c
 *
-
+* This set of tests validates the Adventurer card.
+* -----------------------------------------------------------------------
 */
-
-/*
-* Include the following lines in your makefile:
-*
-* cardtest4: cardtest4.c dominion.o rngs.o
-*      gcc -o cardtest1 -g  cardtest4.c dominion.o rngs.o $(CFLAGS)
-*/
-
 
 #include "dominion.h"
 #include "dominion_helpers.h"
 #include <string.h>
 #include <stdio.h>
-#include <assert.h>
 #include "rngs.h"
 #include <stdlib.h>
 
 #define TESTCARD "adventurer"
 
-int main() {
+int cardtest2() {
 	int testsPassed = 0;
 	int numberOfDiscards;
 	int i, j, m;
@@ -38,8 +30,8 @@ int main() {
 
 	// initialize a game state and player cards
 	initializeGame(numPlayers, k, seed, &G);
+	printf("----------------- Testing Card: %s ----------------\n", TESTCARD);
 
-	printf("Testing Adventurer card\n");
 	printf("Test 1: pick up two treasure cards (coppers), discard one card.\n");
 
 	// copy the game state to a test case
@@ -52,11 +44,11 @@ int main() {
 	cardEffect(adventurer, choice1, choice2, choice3, &testG, handpos, &bonus);
 	//should result in one discarded card, 2 added treasure cards
 	if (oldDiscardCount + numberOfDiscards == testG.discardCount[p] && oldHandCount + 2 == testG.handCount[p]) {
-		printf("AdventurerCard():  PASS\n");
+		printf("AdventurerCard():  PASS pick up two treasure cards (coppers), discard one card\n");
 	}
 	else {
 		testsPassed = -1;
-		printf("AdventurerCard():  FAIL\n");
+		printf("AdventurerCard():  FAIL pick up two treasure cards (coppers), discard one card\n");
 		if (oldDiscardCount + numberOfDiscards != testG.discardCount[p]) {
 			printf("\t discard count = %d, expected to be = %d\n", testG.discardCount[p], oldDiscardCount + numberOfDiscards);
 		}
@@ -78,11 +70,11 @@ int main() {
 	cardEffect(adventurer, choice1, choice2, choice3, &testG, handpos, &bonus);
 	//should result in one discarded card, 2 added treasure cards
 	if (oldDiscardCount + numberOfDiscards == testG.discardCount[p] && oldHandCount + 2 == testG.handCount[p]) {
-		printf("AdventurerCard():  PASS\n");
+		printf("AdventurerCard():  PASS pick up two treasure cards (copper and silver), discard two cards\n");
 	}
 	else {
 		testsPassed = -1;
-		printf("AdventurerCard():  FAIL\n");
+		printf("AdventurerCard():  FAIL pick up two treasure cards (copper and silver), discard two cards\n");
 		if (oldDiscardCount + numberOfDiscards != testG.discardCount[p]) {
 			printf("\t discard count = %d, expected to be = %d\n", testG.discardCount[p], oldDiscardCount + numberOfDiscards);
 		}
@@ -104,11 +96,11 @@ int main() {
 	cardEffect(adventurer, choice1, choice2, choice3, &testG, handpos, &bonus);
 	//should result in one discarded card, 2 added treasure cards
 	if (oldDiscardCount + numberOfDiscards == testG.discardCount[p] && oldHandCount + 2 == testG.handCount[p]) {
-		printf("AdventurerCard():  PASS\n");
+		printf("AdventurerCard():  PASS pick up two treasure cards (silver and gold), discard zero cards\n");
 	}
 	else {
 		testsPassed = -1;
-		printf("AdventurerCard():  FAIL\n");
+		printf("AdventurerCard():  FAIL pick up two treasure cards (silver and gold), discard zero cards\n");
 		if (oldDiscardCount + numberOfDiscards != testG.discardCount[p]) {
 			printf("\t discard count = %d, expected to be = %d\n", testG.discardCount[p], oldDiscardCount + numberOfDiscards);
 		}
@@ -116,7 +108,7 @@ int main() {
 			printf("\t hand count = %d, expected to be = %d\n", testG.handCount[p], oldHandCount + 2);
 		}
 	}
-
+	printf("Test 4: keep digging for treasure -- DISABLED due to infinite loop.\n");
 	/*
 	The following test was designed to make adventurer keep digging for treasure.     It causes an infinite loop so it is not enabled.
 

@@ -1,8 +1,7 @@
 /* -----------------------------------------------------------------------
 * Unit tests for dominion-base game --> dominion.c
-* Include the following lines in your makefile:
 *
-* This set of tests validates the gainCard method.
+* This set of tests validates the buyCard method.
 * -----------------------------------------------------------------------
 */
 
@@ -10,11 +9,9 @@
 #include "dominion_helpers.h"
 #include <string.h>
 #include <stdio.h>
-#include <assert.h>
 #include "rngs.h"
 
-
-int main() {
+int unittest4() {
 	int i, j;
 	int seed = 1000;
 	int numPlayer = 2;
@@ -24,12 +21,11 @@ int main() {
 	int k[10] = { adventurer, council_room, feast, gardens, mine, remodel, smithy, village, baron, great_hall };
 	struct gameState state;
 	int result = -1;
-
-	printf("Results for running buyCard() tests:\n");
+	printf("----------------- Results for running buyCard() tests: ----------------\n");
 
 	memset(&state, 23, sizeof(struct gameState));   // clear the game state
 	r = initializeGame(numPlayer, k, seed, &state); // initialize a new game
-
+	printf("Test 1: buy estate card with sufficient funds.\n");
 	// Test buying cards when funds are sufficient and also insufficient
 	supplyPos = 1; // estate
 	state.supplyCount[supplyPos] = 10;
@@ -53,7 +49,7 @@ int main() {
 		if (supplyCountAfterPurchase != supplyCountBeforePurchase + 1) { printf("\t Supply count after purchase should be %d, and it is %d.\n", supplyCountBeforePurchase + 1, supplyCountAfterPurchase); }
 		if (coinsAfterPurchase != coinsBeforePurchase + getCost(supplyPos)) { printf("\t Coins remaining after purchase should be %d, and it is %d.\n", coinsBeforePurchase + getCost(supplyPos), coinsAfterPurchase); }
 	}
-
+	printf("Test 2: buy province card with sufficient funds.\n");
 	supplyPos = 3; // province
 	coinsBeforePurchase = state.coins;
 	buysLeftBeforePurchase = state.numBuys;
@@ -73,7 +69,7 @@ int main() {
 		if (supplyCountAfterPurchase != supplyCountBeforePurchase + 1) { printf("\t Supply count after purchase should be %d, and it is %d.\n", supplyCountBeforePurchase + 1, supplyCountAfterPurchase); }
 		if (coinsAfterPurchase != coinsBeforePurchase + getCost(supplyPos)) { printf("\t Coins remaining after purchase should be %d, and it is %d.\n", coinsBeforePurchase + getCost(supplyPos), coinsAfterPurchase); }
 	}
-
+	printf("Test 3: attempt to buy adventurer cards with insufficient funds.\n");
 	supplyPos = 7; // adventurer
 	coinsBeforePurchase = state.coins;
 	buysLeftBeforePurchase = state.numBuys;
@@ -97,7 +93,7 @@ int main() {
 	// Reset Game State
 	memset(&state, 23, sizeof(struct gameState));   // clear the game state
 	r = initializeGame(numPlayer, k, seed, &state); // initialize a new game
-
+	printf("Test 4: Test buying cards when there are no more buys left.\n");
 	// Test buying cards when there are no more buys left
 	supplyPos = 1; // estate
 	state.supplyCount[supplyPos] = 10;
@@ -119,7 +115,7 @@ int main() {
 		testsPassed = -1;
 		printf("buyCard():  FAIL when attempting to buy estate card with no buys remaining (%d buys remaining).\n", buysLeftBeforePurchase);
 	}
-
+	printf("Test 5: Test buying card when there are no more of that card available.\n");
 	// Test buying card when there are no more of that card available
 	supplyPos = 1; // estate
 	state.supplyCount[supplyPos] = 0;

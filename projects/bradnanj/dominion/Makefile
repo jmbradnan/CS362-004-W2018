@@ -1,43 +1,47 @@
-#CFLAGS = -Wall -fpic -coverage -lm -std=c99
-CFLAGS = 
-CC = cl
-DBG = /Zi
+CFLAGS = -Wall -fpic -coverage -ftest-coverage -fprofile-arcs -lm -std=c99
 
-default: unittest3.exe
+default: unittestrunner
+
+unittestrunner: unittestrunner.c unittest1.c unittest2.c unittest3.c unittest4.c cardtest1.c cardtest2.c cardtest3.c cardtest4.c dominion.c rngs.c
+	gcc -o unittestrunner unittestrunner.c unittest1.c unittest2.c unittest3.c unittest4.c cardtest1.c cardtest2.c cardtest3.c cardtest4.c dominion.c rngs.c $(CFLAGS)
+	echo "Result for Dominion unit tests and card tests:" > unittestresults.out
+	unittestrunner >> unittestresults.out
+	gcov -b -f dominion.c >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
 
 unittest: unittestresults.out 
 
-all: unittest1.exe unittest2.exe unittest3.exe unittestresults.out
+#all: unittest1.exe unittest2.exe unittest3.exe unittest4.exe cardtest1.exe cardtest2.exe cardtest3.exe cardtest4.exe unittestresults.out
 
 unittest1.exe: unittest1.c dominion.c rngs.c
-	$(CC) -o unittest1 dominion.c rngs.c unittest1.c $(CFLAGS) $(DBG)
+	gcc -o unittest1 dominion.c rngs.c unittest1.c $(CFLAGS)
 	
 unittest2.exe: unittest2.c dominion.c rngs.c
-	$(CC) -o unittest2 dominion.c rngs.c unittest2.c $(CFLAGS) $(DBG)
+	gcc -o unittest2 dominion.c rngs.c unittest2.c $(CFLAGS)
 	
 unittest3.exe: unittest3.c dominion.c rngs.c
-	$(CC) -o unittest3 dominion.c rngs.c unittest3.c $(CFLAGS) $(DBG)
+	gcc -o unittest3 dominion.c rngs.c unittest3.c $(CFLAGS)
+	
+unittest4.exe: unittest4.c dominion.c rngs.c
+	gcc -o unittest4 dominion.c rngs.c unittest4.c $(CFLAGS)
+	
+cardtest1.exe: cardtest1.c dominion.c rngs.c
+	gcc -o cardtest1 dominion.c rngs.c cardtest1.c $(CFLAGS)
+	
+cardtest2.exe: cardtest2.c dominion.c rngs.c
+	gcc -o cardtest2 dominion.c rngs.c cardtest2.c $(CFLAGS)
+	
+cardtest3.exe: cardtest3.c dominion.c rngs.c
+	gcc -o cardtest3 dominion.c rngs.c cardtest3.c $(CFLAGS)
+	
+cardtest4.exe: cardtest4.c dominion.c rngs.c
+	gcc -o cardtest4 dominion.c rngs.c cardtest4.c $(CFLAGS)
 
-unittestresults.out: unittest1.exe unittest2.exe unittest3.exe
-	echo "Result for Dominion unit tests and card tests:" > unittestresults.out
-	
-	echo "unittest1.c:" >> unittestresults.out
-	unittest1 >> unittestresults.out
-	
-	echo. >> unittestresults.out
-	
-	echo "unittest2.c:" >> unittestresults.out
-	unittest2 >> unittestresults.out
-	
-	echo. >> unittestresults.out
-	
-	echo "unittest3.c:" >> unittestresults.out
-	unittest3 >> unittestresults.out
-	
-	echo. >> unittestresults.out
+unittestresults.out: unittestrunner.exe unittest1.exe unittest2.exe unittest3.exe unittest4.exe cardtest1.exe cardtest2.exe cardtest3.exe cardtest4.exe
+#echo "Result for Dominion unit tests and card tests:" > unittestresults.out
 	
 clean:
-	erase unittestresults.out
+	rm unittestresults.out
 
 cleanall: 
-	erase unittestresults.out unittest1.exe unittest2.exe unittest3.exe *.gcda *.gcno *.gcov
+	rm unittestresults.out unittestrunner.exe unittest1.exe unittest2.exe unittest3.exe unittest4.exe cardtest1.exe cardtest2.exe cardtest3.exe cardtest4.exe *.gcda *.gcno *.gcov

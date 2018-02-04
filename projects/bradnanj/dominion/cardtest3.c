@@ -1,28 +1,20 @@
-/*
-* cardtest4.c
+/* -----------------------------------------------------------------------
+* Unit tests for dominion-base game --> dominion.c
 *
-
+* This set of tests validates the Adventurer card.
+* -----------------------------------------------------------------------
 */
-
-/*
-* Include the following lines in your makefile:
-*
-* cardtest4: cardtest4.c dominion.o rngs.o
-*      gcc -o cardtest1 -g  cardtest4.c dominion.o rngs.o $(CFLAGS)
-*/
-
 
 #include "dominion.h"
 #include "dominion_helpers.h"
 #include <string.h>
 #include <stdio.h>
-#include <assert.h>
 #include "rngs.h"
 #include <stdlib.h>
 
 #define TESTCARD "village"
 
-int main() {
+int cardtest3() {
 	int newCards = 0;
 	int discarded;
 	int testsPassed = 0;
@@ -40,7 +32,7 @@ int main() {
 
 	// initialize a game state and player cards
 	initializeGame(numPlayers, k, seed, &G);
-	printf("Testing %s card\n", TESTCARD);
+	printf("----------------- Testing Card: %s ----------------\n", TESTCARD);
 	printf("Test 1: play basic village card.\n");
 
 	// copy the game state to a test case
@@ -51,11 +43,11 @@ int main() {
 	cardEffect(village, choice1, choice2, choice3, &testG, handpos, &bonus);
 	
 	if (oldNumActions + 2 == testG.numActions && oldDiscardCount + 1 == testG.discardCount[p]) {
-		printf("villageCard():  PASS\n");
+		printf("villageCard():  PASS play basic village card\n");
 	}
 	else {
 		testsPassed = -1;
-		printf("villageCard():  FAIL\n");
+		printf("villageCard():  FAIL play basic village card\n");
 		if (oldNumActions + 2 != testG.numActions) {
 			printf("\t numActions = %d, expected = %d\n", testG.numActions, oldNumActions + 2);
 		}
@@ -65,7 +57,6 @@ int main() {
 	}
 
 	testsPassed == 0 ? printf("All tests passed!\n") : printf("All tests did not pass!  Please review the test output for more details.\n");
-
 
 	return 0;
 }

@@ -1,8 +1,7 @@
 /* -----------------------------------------------------------------------
 * Unit tests for dominion-base game --> dominion.c
-* Include the following lines in your makefile:
 *
-* This set of tests validates the gainCard method.
+* This set of tests validates the discardCard method.
 * -----------------------------------------------------------------------
 */
 
@@ -10,11 +9,9 @@
 #include "dominion_helpers.h"
 #include <string.h>
 #include <stdio.h>
-#include <assert.h>
 #include "rngs.h"
 
-
-int main() {
+int unittest2() {
 	int i;
 	int seed = 1000;
 	int numPlayer = 2;
@@ -31,7 +28,8 @@ int main() {
 	memset(&state, 23, sizeof(struct gameState));   // clear the game state
 	r = initializeGame(numPlayer, k, seed, &state); // initialize a new game
 
-	printf("Results for running discardCard() tests:\n");
+	printf("----------------- Results for running discardCard() tests: ----------------\n");
+
 	for (p = 0; p < numPlayer; p++)
 	{
 		handPos = 4; //last card in the hand array has been played, number of card in hand is reduced
@@ -39,7 +37,7 @@ int main() {
 		oldHandCount = state.handCount[p];  // store handCount before discardCard is called
 		discardCard(handPos, p, &state, trashFlag);
 		newHandCount = state.handCount[p];
-
+		printf("Test 1: discard last card in hand.\n");
 		if (newHandCount + 1 == oldHandCount) {
 			printf("discardCard():  PASS when discarding last card in the hand for player %d\n", p);
 		}
@@ -65,7 +63,7 @@ int main() {
 				handsMatch = -1;
 			}
 		}
-
+		printf("Test 2: discard card in hand (non-terminal).\n");
 		if (handsMatch == 0 && newHandCount + 1 == oldHandCount) {
 			printf("discardCard():  PASS when discarding non-terminal card in the hand for player %d\n", p);
 		}
