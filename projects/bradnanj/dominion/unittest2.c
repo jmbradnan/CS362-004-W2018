@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include "rngs.h"
 
+//int main() {
 int unittest2() {
 	int i;
 	int seed = 1000;
@@ -30,8 +31,8 @@ int unittest2() {
 
 	printf("----------------- Results for running discardCard() tests: ----------------\n");
 
-	for (p = 0; p < numPlayer; p++)
-	{
+	//for (p = 0; p < numPlayer; p++)
+	//{
 		handPos = 4; //last card in the hand array has been played, number of card in hand is reduced
 		trashFlag = 0;
 		oldHandCount = state.handCount[p];  // store handCount before discardCard is called
@@ -76,7 +77,45 @@ int unittest2() {
 				printf("\t Card hand count should be %d, and it is %d.\n", oldHandCount - 1, newHandCount);
 			}
 		}
-	}
+
+		printf("Test 3: set trash flag.\n");
+		memset(&state, 23, sizeof(struct gameState));   // clear the game state
+		r = initializeGame(numPlayer, k, seed, &state); // initialize a new game
+		handPos = 0;
+		trashFlag = 1;
+		for (i = 0; i < 5; i++) {
+			hand[i] = state.hand[p][i];
+		}
+		oldHandCount = state.handCount[p];  // store handCount before discardCard is called
+		hand[handPos] = state.hand[p][oldHandCount - 1]; //replace discarded card with last card in hand
+		hand[oldHandCount - 1] = -1; //set last card to -1
+		oldPlayedCardCount = state.playedCardCount;
+		discardCard(handPos, p, &state, trashFlag);
+		newHandCount = state.handCount[p];
+		//compare hand to state.hand for player and make sure they match
+		for (i = 0; i < 5; i++) {
+			if (hand[i] != state.hand[p][i]) {
+				handsMatch = -1;
+			}
+		}
+
+		if (handsMatch == 0 && newHandCount + 1 == oldHandCount && state.playedCardCount == oldPlayedCardCount) {
+			printf("discardCard():  PASS when discarding non-terminal card in the hand for player %d with trash flag set\n", p);
+		}
+		else {
+			printf("discardCard():  FAIL when discarding non-terminal card in the hand for player %d with trash flag set\n", p);
+			if (handsMatch != 0) {
+				printf("\t Hand for player %d is not correct.\n", p);
+			}
+			if (newHandCount + 1 != oldHandCount) {
+				printf("\t Card hand count should be %d, and it is %d.\n", oldHandCount - 1, newHandCount);
+			}
+			if (state.playedCardCount != oldPlayedCardCount) {
+				printf("\t Card discard count should be %d, and it is %d.\n", oldPlayedCardCount, state.playedCardCount);
+			}
+		}
+
+	//}
 
 	testsPassed == 0 ? printf("All tests passed!\n") : printf("All tests did not pass!  Please review the test output for more details.\n");
 	return 0;
