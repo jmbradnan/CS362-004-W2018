@@ -11,7 +11,7 @@ unittestrunner: unittestrunner.c unittest1.c unittest2.c unittest3.c unittest4.c
 
 unittest: unittestresults.out 
 
-#all: unittest1.exe unittest2.exe unittest3.exe unittest4.exe cardtest1.exe cardtest2.exe cardtest3.exe cardtest4.exe unittestresults.out
+#all: unittestrunner.exe unittest1.exe unittest2.exe unittest3.exe unittest4.exe cardtest1.exe cardtest2.exe cardtest3.exe cardtest4.exe unittestresults.out
 
 unittest1.exe: unittest1.c dominion.c rngs.c
 	gcc -o unittest1 dominion.c rngs.c unittest1.c $(CFLAGS)
