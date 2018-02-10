@@ -667,25 +667,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   switch( card ) 
     {
     case adventurer:
-      while(drawntreasure<2){
-	if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
-	  shuffle(currentPlayer, state);
-	}
-	drawCard(currentPlayer, state);
-	cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
-	if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
-	  drawntreasure++;
-	else{
-	  temphand[z]=cardDrawn;
-	  state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
-	  z++;
-	}
-      }
-      while(z-1>=0){
-	state->discard[currentPlayer][state->discardCount[currentPlayer]++]=temphand[z-1]; // discard all cards in play that have been drawn
-	z=z-1;
-      }
-      return 0;
+		return adverturerCard(state, cardDrawn, temphand, currentPlayer, drawntreasure);
 			
     case council_room:
       //+4 Cards
@@ -712,57 +694,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 			
     case feast:
-      //gain card with cost up to 5
-      //Backup hand
-      for (i = 0; i <= state->handCount[currentPlayer]; i++){
-	temphand[i] = state->hand[currentPlayer][i];//Backup card
-	state->hand[currentPlayer][i] = -1;//Set to nothing
-      }
-      //Backup hand
-
-      //Update Coins for Buy
-      updateCoins(currentPlayer, state, 5);
-      x = 1;//Condition to loop on
-      while( x == 1) {//Buy one card
-	if (supplyCount(choice1, state) <= 0){
-	  if (DEBUG)
-	    printf("None of that card left, sorry!\n");
-
-	  if (DEBUG){
-	    printf("Cards Left: %d\n", supplyCount(choice1, state));
-	  }
-	}
-	else if (state->coins < getCost(choice1)){
-	  printf("That card is too expensive!\n");
-
-	  if (DEBUG){
-	    printf("Coins: %d < %d\n", state->coins, getCost(choice1));
-	  }
-	}
-	else{
-
-	  if (DEBUG){
-	    printf("Deck Count: %d\n", state->handCount[currentPlayer] + state->deckCount[currentPlayer] + state->discardCount[currentPlayer]);
-	  }
-
-	  gainCard(choice1, state, 0, currentPlayer);//Gain the card
-	  x = 0;//No more buying cards
-
-	  if (DEBUG){
-	    printf("Deck Count: %d\n", state->handCount[currentPlayer] + state->deckCount[currentPlayer] + state->discardCount[currentPlayer]);
-	  }
-
-	}
-      }     
-
-      //Reset Hand
-      for (i = 0; i <= state->handCount[currentPlayer]; i++){
-	state->hand[currentPlayer][i] = temphand[i];
-	temphand[i] = -1;
-      }
-      //Reset Hand
-      			
-      return 0;
+		return feastCard(currentPlayer, state, temphand, choice1);
 			
     case gardens:
       return -1;
@@ -829,26 +761,11 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case smithy:
-      //+3 Cards
-      for (i = 0; i < 3; i++)
-	{
-	  drawCard(currentPlayer, state);
-	}
-			
-      //discard card from hand
-      discardCard(handPos, currentPlayer, state, 0);
-      return 0;
+		return smithyCard(currentPlayer, state, handPos);
 		
     case village:
-      //+1 Card
-      drawCard(currentPlayer, state);
-			
-      //+2 Actions
-      state->numActions = state->numActions + 2;
-			
-      //discard played card from hand
-      discardCard(handPos, currentPlayer, state, 0);
-      return 0;
+		return villageCard(currentPlayer, state, handPos);
+
 		
     case baron:
       state->numBuys++;//Increase buys by 1!
@@ -1139,21 +1056,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
 		
     case embargo: 
-      //+2 Coins
-      state->coins = state->coins + 2;
-			
-      //see if selected pile is in play
-      if ( state->supplyCount[choice1] == -1 )
-	{
-	  return -1;
-	}
-			
-      //add embargo token to selected supply pile
-      state->embargoTokens[choice1]++;
-			
-      //trash card
-      discardCard(handPos, currentPlayer, state, 1);		
-      return 0;
+		return embargoCard(currentPlayer, state, handPos, choice1);
+
 		
     case outpost:
       //set outpost flag
@@ -1221,6 +1125,133 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
     }
 	
   return -1;
+}
+
+int feastCard(int currentPlayer, struct gameState *state, int temphand[MAX_HAND], int choice1) {
+
+	int x, i;
+		//gain card with cost up to 5
+		//Backup hand
+		for (i = 0; i <= state->handCount[currentPlayer]; i++) {
+			temphand[i] = state->hand[currentPlayer][i];//Backup card
+			state->hand[currentPlayer][i] = -1;//Set to nothing
+		}
+		//Backup hand
+
+		//Update Coins for Buy
+		updateCoins(currentPlayer, state, 5);
+		x = 1;//Condition to loop on
+		while (x == 1) {//Buy one card
+			if (supplyCount(choice1, state) <= 0) {
+				if (DEBUG)
+					printf("None of that card left, sorry!\n");
+
+				if (DEBUG) {
+					printf("Cards Left: %d\n", supplyCount(choice1, state));
+				}
+			}
+			else if (state->coins < getCost(choice1)) {
+				printf("That card is too expensive!\n");
+
+				if (DEBUG) {
+					printf("Coins: %d < %d\n", state->coins, getCost(choice1));
+				}
+			}
+			else {
+
+				if (DEBUG) {
+					printf("Deck Count: %d\n", state->handCount[currentPlayer] + state->deckCount[currentPlayer] + state->discardCount[currentPlayer]);
+				}
+
+				gainCard(choice1, state, 0, currentPlayer);//Gain the card
+				x < 0;//No more buying cards
+
+				if (DEBUG) {
+					printf("Deck Count: %d\n", state->handCount[currentPlayer] + state->deckCount[currentPlayer] + state->discardCount[currentPlayer]);
+				}
+
+			}
+		}
+
+		//Reset Hand
+		for (i = 0; i <= state->handCount[currentPlayer]; i++) {
+			state->hand[currentPlayer][i] = temphand[i];
+			temphand[i] = -1;
+		}
+		//Reset Hand
+
+		return 0;
+}
+
+int villageCard(int currentPlayer, struct gameState *state, int handPos) {
+
+	//+1 Card
+	drawCard(currentPlayer, state);
+
+	//+2 Actions
+	state->numActions = state->numActions + 2;
+
+	//discard played card from hand
+	discardCard(handPos, currentPlayer, state, 1);
+	return 0;
+
+}
+
+int smithyCard(int currentPlayer, struct gameState *state, int handPos) {
+	int i;
+
+	//+3 Cards
+	for (i = 0; i < 3; i++)
+	{
+		drawCard(currentPlayer, state);
+	}
+
+	//discard card from hand
+	discardCard(++handPos, currentPlayer, state, 0);
+
+	return 0;
+}
+
+int embargoCard(int currentPlayer, struct gameState *state, int handPos, int choice1) {
+
+		//+2 Coins
+		state->coins = state->coins + 2;
+
+		//see if selected pile is in play
+		if (state->supplyCount[choice1] == -1)
+		{
+			return -1;
+		}
+
+		//add embargo token to selected supply pile
+		state->embargoTokens[choice1]++;
+
+		//trash card
+		discardCard(handPos, currentPlayer, state, 1);
+		return 0;
+}
+
+int adverturerCard(struct gameState *state, int cardDrawn, int temphand[MAX_HAND], int currentPlayer, int drawntreasure) {
+	int z = 0;
+		while (drawntreasure<2) {
+			if (state->deckCount[currentPlayer] <1) {//if the deck is empty we need to shuffle discard and add to deck
+				shuffle(currentPlayer, state);
+			}
+			drawCard(currentPlayer, state);
+			cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer] - 1];//top card of hand is most recently drawn card.
+			if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
+				drawntreasure++;
+			else {
+				temphand[z] = cardDrawn;
+				state->handCount[currentPlayer]; //this should just remove the top card (the most recently drawn one).
+				z++;
+			}
+		}
+		while (z - 1 >= 0) {
+			state->discard[currentPlayer][state->discardCount[currentPlayer]++] = temphand[z - 1]; // discard all cards in play that have been drawn
+			z = z - 1;
+		}
+		return 0;
 }
 
 int discardCard(int handPos, int currentPlayer, struct gameState *state, int trashFlag)
