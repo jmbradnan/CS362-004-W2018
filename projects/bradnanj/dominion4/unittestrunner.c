@@ -51,13 +51,23 @@ int* getKingdomCards(int size, int card) {
 	return k;
 }
 
+/*
+int rand_card() {
+	return rand() % kingdom_card_count;
+}
+*/
+
 int getGameState(struct gameState *state, struct gameState *testState)
 {
-	int numPlayers = 3;
-	int seed = 1000;
+	int numPlayers = 4;
+	int seed = rand() % 1000;
+	int currentPlayer = rand() % numPlayers;
 	int* k = getKingdomCards(10, adventurer);
 	// initialize a game state and player cards
 	initializeGame(numPlayers, k, seed, state);
+
+	state->whoseTurn = currentPlayer;
+
 	// copy the game state to a test case
 	memcpy(testState, state, sizeof(struct gameState));
 	return 0;
@@ -75,21 +85,13 @@ int main() {
 	int drawntreasure = 0;
 
 	struct gameState state, testState;
-	
-	//int* k = getKingdomCards(10, adventurer);
-	// initialize a game state and player cards
-	//initializeGame(numPlayers, k, seed, &state);
-	printf("----------------- Testing Card: %s ----------------\n", TESTCARD);
 
-	//printf("Test 1: pick up two treasure cards (coppers), discard one card.\n");
-
-	// copy the game state to a test case
-	//memcpy(&testState, &state, sizeof(struct gameState));
 
 	for (i = 0; i < 1000; i++) {
-		//currentPlayer = whoseTurn(state);
 		getGameState(&state, &testState);
-		randomTestcard1(&testState, cardDrawn, temphand, currentPlayer, drawntreasure);
+		currentPlayer = whoseTurn(&state);
+
+		randomTestcard1(&state, cardDrawn, temphand, currentPlayer, drawntreasure);
 	}
 	
 }
