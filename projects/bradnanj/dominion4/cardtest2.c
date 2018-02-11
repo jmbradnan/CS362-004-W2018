@@ -21,6 +21,7 @@ int rand_card() {
 }
 */
 
+//https://stackoverflow.com/questions/6127503/shuffle-array-in-c
 int array_shuffle(int *array, size_t n) {
 	if (n > 1)
 	{

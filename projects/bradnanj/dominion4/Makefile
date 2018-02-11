@@ -3,13 +3,13 @@ CFLAGS =
 CC = cl
 DBG = /Zi
 
-default: randomtestcard1.exe
+default: unittestrunner
 
-randomtestcard1.exe: randomtestcard1.c dominion.c rngs.c
-	$(CC) randomtestcard1.c dominion.c rngs.c $(CFLAGS) $(DBG)
+#randomtestcard1.exe: randomtestcard1.c dominion.c rngs.c
+	#$(CC) randomtestcard1.c dominion.c rngs.c $(CFLAGS) $(DBG)
 	
-unittestrunner: unittestrunner.c cardtest2.c dominion.c rngs.c
-	$(CC) unittestrunner unittestrunner.c cardtest2.c dominion.c rngs.c $(CFLAGS) $(DBG)
+unittestrunner: unittestrunner.c randomtestcard1.c dominion.c rngs.c
+	$(CC) unittestrunner unittestrunner.c randomtestcard1.c dominion.c rngs.c $(CFLAGS) $(DBG)
 
 clean:
-	erase -f *.o randomtestcard1.exe  *.o
+	erase -f *.o unittestrunner.exe  *.o
