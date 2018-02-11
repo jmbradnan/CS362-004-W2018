@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include "rngs.h"
 #include <stdlib.h>
+#include <time.h>
 
 #define TESTCARD "adventurer"
 
@@ -48,6 +49,7 @@ int* getKingdomCards(int size, int card) {
 	for (i = 1; i < size; i++) {
 		k[i] = most_cards[i];
 	}
+	array_shuffle(k, 10);
 	return k;
 }
 
@@ -57,16 +59,37 @@ int rand_card() {
 }
 */
 
+//inclusive range
+int randRange(int begin, int end) {
+	return begin + (rand() % (end - begin+1));
+}
+
 int getGameState(struct gameState *state, struct gameState *testState)
 {
 	int numPlayers = 4;
+	int i, pos = 0;
+	
+	int coins;
+	int coinValue;
 	int seed = rand() % 1000;
-	int currentPlayer = rand() % numPlayers;
+	//int currentPlayer = rand() % numPlayers;
 	int* k = getKingdomCards(10, adventurer);
 	// initialize a game state and player cards
 	initializeGame(numPlayers, k, seed, state);
 
-	state->whoseTurn = currentPlayer;
+	//state->whoseTurn = currentPlayer;
+
+
+	//muck the kinds and numbers of coins in the game state
+	coins = rand() % 4;
+	for (i = 0; i < coins; i++) {
+		coinValue = randRange(4, 6);
+		state->hand[0][pos] = coinValue;
+		pos++;
+	}
+
+	array_shuffle(state->hand, state->handCount[0]);  //shuffles hand in first position
+
 
 	// copy the game state to a test case
 	memcpy(testState, state, sizeof(struct gameState));
@@ -76,8 +99,10 @@ int getGameState(struct gameState *state, struct gameState *testState)
 int main() {
 	//int testsPassed = 0;
 	int i, j, m;
+	time_t t;
+	int coins;
 	int handpos = 0, choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0;
-	//int seed = 1000;
+	srand((unsigned)time(&t));
 	
 	int currentPlayer = 0;
 	int cardDrawn = 0;
@@ -89,8 +114,12 @@ int main() {
 
 	for (i = 0; i < 1000; i++) {
 		getGameState(&state, &testState);
-		currentPlayer = whoseTurn(&state);
+		//currentPlayer = whoseTurn(&state);
 
+		/*for (j = 0; j < 10; j++) {
+			drawCard(currentPlayer, &state);
+		}*/
+		
 		randomTestcard1(&state, cardDrawn, temphand, currentPlayer, drawntreasure);
 	}
 	

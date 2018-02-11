@@ -1243,7 +1243,8 @@ int adverturerCard(struct gameState *state, int cardDrawn, int temphand[MAX_HAND
 				drawntreasure++;
 			else {
 				temphand[z] = cardDrawn;
-				state->handCount[currentPlayer]; //this should just remove the top card (the most recently drawn one).
+				//temporarily change back to original version of this code
+				state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
 				z++;
 			}
 		}
