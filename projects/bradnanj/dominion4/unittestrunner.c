@@ -67,8 +67,9 @@ int randRange(int begin, int end) {
 int getGameState(struct gameState *state, struct gameState *testState)
 {
 	int numPlayers = 4;
+	int oldCardCount, addedCards;
 	int i, pos = 0;
-	
+
 	int coins;
 	int coinValue;
 	int seed = rand() % 1000;
@@ -79,17 +80,43 @@ int getGameState(struct gameState *state, struct gameState *testState)
 
 	//state->whoseTurn = currentPlayer;
 
+	// add more cards to hand from supply 
+	oldCardCount = state->handCount[0];
+	addedCards = randRange(0, 4); //you can add up to 5 more cards to the hand
+	state->handCount[0] = oldCardCount + addedCards;
+	for (i = oldCardCount; i < state->handCount[0]; i++) {
+		pos = randRange(0, 25);
+		while (state->supplyCount[pos] == -1) {
+			pos = randRange(0, 25);
+		}
+		state->hand[0][i] = pos;
+		state->supplyCount[pos]--;
+	}
 
-	//muck the kinds and numbers of coins in the game state
-	coins = rand() % 4;
+	// mutate the deck for player 0
+	oldCardCount = state->deckCount[0];
+	addedCards = randRange(oldCardCount, 30); //you can have up to 500 cards in hand, but there won't be enough supply
+
+	//mutate the kinds and numbers of coins in the deck for player 0
+	coins = rand() % 5;
 	for (i = 0; i < coins; i++) {
 		coinValue = randRange(4, 6);
 		state->hand[0][pos] = coinValue;
 		pos++;
 	}
 
-	array_shuffle(state->hand, state->handCount[0]);  //shuffles hand in first position
+	state->deckCount[0] = oldCardCount + addedCards;
+	for (i = oldCardCount; i < state->deckCount[0]; i++) {
+		pos = randRange(0, 25);
+		while (state->supplyCount[pos] == -1) {
+			pos = randRange(0, 25);
+		}
+		state->deck[0][i] = pos;
+		state->supplyCount[pos]--;
+	}
 
+	array_shuffle(state->hand, state->handCount[0]);  //shuffles hand in player 0 position
+	array_shuffle(state->deck, state->deckCount[0]);  //shuffles deck in player 0 position
 
 	// copy the game state to a test case
 	memcpy(testState, state, sizeof(struct gameState));
