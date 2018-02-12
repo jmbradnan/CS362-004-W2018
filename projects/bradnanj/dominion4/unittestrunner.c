@@ -13,6 +13,12 @@
 #include <stdlib.h>
 #include <time.h>
 
+int main() {
+	randomTestcard1();
+	return 0;
+}
+
+/*
 #define TESTCARD "adventurer"
 
  //https://stackoverflow.com/questions/6127503/shuffle-array-in-c
@@ -52,12 +58,17 @@ int* getKingdomCards(int size, int card) {
 	array_shuffle(k, 10);
 	return k;
 }
+int gameStateValidator(struct gameState *state, struct gameState *testState) {
+	//compare hand
 
-/*
-int rand_card() {
-	return rand() % kingdom_card_count;
+	//compare discard pile
+
+	return 0;
 }
-*/
+
+int setPlayedGameState() {
+	return 0;
+}
 
 //inclusive range
 int randRange(int begin, int end) {
@@ -135,19 +146,19 @@ int main() {
 	int cardDrawn = 0;
 	int temphand[MAX_HAND];
 	int drawntreasure = 0;
+	int returnVal = -1;
 
 	struct gameState state, testState;
 
 
 	for (i = 0; i < 1000; i++) {
 		getGameState(&state, &testState);
-		//currentPlayer = whoseTurn(&state);
-
-		/*for (j = 0; j < 10; j++) {
-			drawCard(currentPlayer, &state);
-		}*/
 		
-		randomTestcard1(&state, cardDrawn, temphand, currentPlayer, drawntreasure);
+		returnVal = randomTestcard1(&state, cardDrawn, temphand, currentPlayer, drawntreasure);
+
+		printf("Return value = %d\n", returnVal);
 	}
 	
 }
+
+*/
