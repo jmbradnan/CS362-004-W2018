@@ -123,10 +123,10 @@ int getGameState(struct gameState *state, struct gameState *testState)
 int discardedCount(struct gameState *state, int p) {
 	int count = 0;
 	int drawnTreasure = 0;
-	int lastCard = state->handCount[p] - 1;
+	int lastCard = state->deckCount[p] - 1;
 
 	while (drawnTreasure < 2 && lastCard >= 0) {
-		if (state->hand[lastCard] == copper || state->hand[lastCard] == silver || state->hand[lastCard] == gold) {
+		if (state->deck[p][lastCard] == copper || state->deck[p][lastCard] == silver || state->deck[p][lastCard] == gold) {
 			drawnTreasure++;
 		}
 		else {
