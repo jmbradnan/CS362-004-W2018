@@ -6,9 +6,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define TESTCARD "adventurer"
-
-/*
 //https://stackoverflow.com/questions/6127503/shuffle-array-in-c
 int array_shuffle(int *array, size_t n) {
 	if (n > 1)
@@ -137,43 +134,3 @@ int discardedCount(struct gameState *state, int p) {
 	}
 	return count;
 }
-*/
-
-//int randomTestcard1(struct gameState *state, int cardDrawn, int temphand[MAX_HAND], int currentPlayer, int drawntreasure) {
-int randomTestcard1() {
-	int testsPassed = 0;
-	int i, j, m;
-	time_t t;
-	int coins;
-	int oldHandCount, expectedDiscardCount;
-	int currentPlayer = 0;
-	int cardDrawn = 0;
-	int temphand[MAX_HAND];
-	int drawntreasure = 0;
-	int returnVal = -1;
-	srand((unsigned)time(&t));
-
-	struct gameState state, testState;
-
-	for (i = 0; i < 1000; i++) {
-		getGameState(&state, &testState);
-
-		oldHandCount = state.handCount[currentPlayer];
-		expectedDiscardCount = discardedCount(&testState, currentPlayer);
-		//returnVal = randomTestcard1(&state, cardDrawn, temphand, currentPlayer, drawntreasure);
-		returnVal = adverturerCard(&state, cardDrawn, temphand, currentPlayer, drawntreasure);
-
-		if (returnVal == 0 && state.handCount[currentPlayer] == oldHandCount + 2 && expectedDiscardCount == state.discardCount[currentPlayer] ) {
-			printf("Test PASS\n");
-		}
-		else {
-			printf("Test FAIL\n");
-		}
-
-		
-	}
-	//adverturerCard(state, cardDrawn, temphand, currentPlayer, drawntreasure);
-	return 0;
-}
-
-

@@ -15,6 +15,8 @@
 
 int main() {
 	randomTestcard1();
+	randomTestcard2();
+	randomTestcard3();
 	return 0;
 }
 
