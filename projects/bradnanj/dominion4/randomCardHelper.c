@@ -112,15 +112,14 @@ int getGameState(struct gameState *state, struct gameState *testState)
 	// mutate the deck for player 0
 	oldCardCount = state->deckCount[0];
 	addedCards = randRange(oldCardCount, 30); //you can have up to 500 cards in hand, but there won't be enough supply
-
-											  //mutate the kinds and numbers of coins in the deck for player 0
+	//mutate the kinds and numbers of coins in the deck for player 0
 	coins = rand() % 5;
 	for (i = 0; i < coins; i++) {
 		coinValue = randRange(4, 6);
 		state->hand[0][pos] = coinValue;
 		pos++;
 	}
-
+	//add cards to deck
 	state->deckCount[0] = oldCardCount + addedCards;
 	for (i = oldCardCount; i < state->deckCount[0]; i++) {
 		pos = randRange(0, 25);
@@ -136,21 +135,4 @@ int getGameState(struct gameState *state, struct gameState *testState)
 													  // copy the game state to a test case
 	memcpy(testState, state, sizeof(struct gameState));
 	return 0;
-}
-
-int discardedCount(struct gameState *state, int p) {
-	int count = 0;
-	int drawnTreasure = 0;
-	int lastCard = state->deckCount[p] - 1;
-
-	while (drawnTreasure < 2 && lastCard >= 0) {
-		if (state->deck[p][lastCard] == copper || state->deck[p][lastCard] == silver || state->deck[p][lastCard] == gold) {
-			drawnTreasure++;
-		}
-		else {
-			count++;
-		}
-		lastCard--;
-	}
-	return count;
 }

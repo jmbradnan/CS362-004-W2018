@@ -8,7 +8,9 @@
 
 #define TESTCARD "steward"
 
-int randomTestcard2() {
+int main() {
+	time_t t;
+	srand((unsigned)time(&t));
 	int testsPassed = 0;
 	int i;			//counters
 	int choice1, choice2, choice3, bonus, handpos = 0;
@@ -28,7 +30,7 @@ int randomTestcard2() {
 		oldCoinCount = state.coins;
 		handpos = randRange(0, state.handCount[currentPlayer]-1);
 		choice1 = choices[randRange(0, 4)];
-		choice2 = handpos;  //need to pick other than handpos for choice2 and choic3
+		choice2 = handpos;  //need to pick other than handpos for choice2 and choice3
 		choice3 = handpos;
 		while (choice2 == handpos) {
 			choice2 = randRange(0, state.handCount[currentPlayer] - 1);

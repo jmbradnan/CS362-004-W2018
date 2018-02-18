@@ -8,10 +8,11 @@
 
 #define TESTCARD "adventurer"
 
-int randomTestcard1() {
+int main() {
+	time_t t;
+	srand((unsigned)time(&t));
 	int testsPassed = 0;
 	int i, j, m;
-	//time_t t;
 	int coins;
 	int oldHandCount, expectedDiscardCount;
 	int currentPlayer = 0;
@@ -19,7 +20,6 @@ int randomTestcard1() {
 	int temphand[MAX_HAND];
 	int drawntreasure = 0;
 	int returnVal;
-	//srand((unsigned)time(&t));
 
 	struct gameState state, testState;
 
@@ -50,4 +50,21 @@ int randomTestcard1() {
 	return 0;
 }
 
+
+int discardedCount(struct gameState *state, int p) {
+	int count = 0;
+	int drawnTreasure = 0;
+	int lastCard = state->deckCount[p] - 1;
+
+	while (drawnTreasure < 2 && lastCard >= 0) {
+		if (state->deck[p][lastCard] == copper || state->deck[p][lastCard] == silver || state->deck[p][lastCard] == gold) {
+			drawnTreasure++;
+		}
+		else {
+			count++;
+		}
+		lastCard--;
+	}
+	return count;
+}
 
