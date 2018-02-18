@@ -10,18 +10,11 @@
 
 int randomTestcard2() {
 	int testsPassed = 0;
-	int i, j, m;			//counters
-	int choice1, choice2, choice3, bonus, handpos, deckpos = 0;
-	//time_t t;
-	int card1, card2;
-	//int oldHandCount, expectedDiscardCount;
+	int i;			//counters
+	int choice1, choice2, choice3, bonus, handpos = 0;
 	int currentPlayer = 0;
-	int cardDrawn = 0;
-	//int temphand[MAX_HAND];
-	//int drawntreasure = 0;
 	int returnVal;
 	int oldDeckCount, oldHandCount, oldDiscardCount, oldPlayedCardCount, oldCoinCount = 0;
-	//srand((unsigned)time(&t));
 	int choices[5] = { -1, 0, 1, 2, 3 };
 
 	struct gameState state, testState;
@@ -35,7 +28,7 @@ int randomTestcard2() {
 		oldCoinCount = state.coins;
 		handpos = randRange(0, state.handCount[currentPlayer]-1);
 		choice1 = choices[randRange(0, 4)];
-		choice2 = handpos;  //need to pick other than handpos
+		choice2 = handpos;  //need to pick other than handpos for choice2 and choic3
 		choice3 = handpos;
 		while (choice2 == handpos) {
 			choice2 = randRange(0, state.handCount[currentPlayer] - 1);
@@ -78,13 +71,13 @@ int randomTestcard2() {
 					printf("\t Incorrect coin count after play.   Coin count expected to be %d and it was %d.\n", oldCoinCount + 2, state.coins);
 				}
 				if (state.handCount[currentPlayer] != oldHandCount - 1) {
-					printf("\t Incorrect hand count after play.   Hand count expected to be %d and it was %d.\n", oldHandCount + 1, state.handCount[currentPlayer]);
+					printf("\t Incorrect hand count after play.   Hand count expected to be %d and it was %d.\n", oldHandCount - 1, state.handCount[currentPlayer]);
 				}
 			}
 		}
 		else {
 			if ((returnVal == 0) && (oldDiscardCount + 2 == state.discardCount[currentPlayer]) &&
-				(oldHandCount - 1 == state.handCount[currentPlayer]) && (oldPlayedCardCount + 1 == state.playedCardCount)) {
+				(oldHandCount - 3 == state.handCount[currentPlayer]) && (oldPlayedCardCount + 1 == state.playedCardCount)) {
 				printf("Test PASS steward with choice1 = 2.\n");
 			}
 			else {
@@ -98,8 +91,8 @@ int randomTestcard2() {
 				if (oldDiscardCount + 2 != state.discardCount[currentPlayer]) {
 					printf("\t Incorrect discard count after play.   Discard count expected to be %d and it was %d.\n", oldDiscardCount + 2, state.discardCount[currentPlayer]);
 				}
-				if (state.handCount[currentPlayer] != oldHandCount - 1) {
-					printf("\t Incorrect hand count after play.   Hand count expected to be %d and it was %d.\n", oldHandCount + 1, state.handCount[currentPlayer]);
+				if (state.handCount[currentPlayer] != oldHandCount - 3) {
+					printf("\t Incorrect hand count after play.   Hand count expected to be %d and it was %d.\n", oldHandCount - 3, state.handCount[currentPlayer]);
 				}
 			}
 		}
