@@ -18,7 +18,7 @@ int randomTestcard2() {
 	int choices[5] = { -1, 0, 1, 2, 3 };
 
 	struct gameState state, testState;
-	for (i = 0; i < 1000; i++) {
+	for (i = 0; i < 500; i++) {
 		returnVal = -1;
 		getGameState(&state, &testState);
 		oldDeckCount = state.deckCount[currentPlayer];
