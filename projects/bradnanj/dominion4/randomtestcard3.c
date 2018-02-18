@@ -14,18 +14,19 @@ int randomTestcard3() {
 	int testsPassed = 0;
 	int i, j, m;
 	int choice1, choice2, choice3, bonus, handpos = 0;
-	time_t t;
+	//time_t t;
 	int coins;
 	int oldHandCount, expectedDiscardCount;
 	int currentPlayer = 0;
 	int cardDrawn = 0;
 	int temphand[MAX_HAND];
 	int drawntreasure = 0;
-	int returnVal = -1;
-	srand((unsigned)time(&t));
+	int returnVal;
+	//srand((unsigned)time(&t));
 
 	struct gameState state, testState;
 	for (i = 0; i < 1000; i++) {
+		returnVal = -1;
 		getGameState(&state, &testState);
 
 		returnVal = cardEffect(village, 0, 0, 0, &testState, 0, &bonus);

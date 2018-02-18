@@ -60,6 +60,10 @@ int randRange(int begin, int end) {
 	return begin + (rand() % (end - begin + 1));
 }
 
+int isTreasure(struct gameState *state, int currentPlayer, int position) {
+	return !(state->hand[currentPlayer][position] < copper || state->hand[currentPlayer][position] > gold);
+}
+
 int getGameState(struct gameState *state, struct gameState *testState)
 {
 	int numPlayers = 4;
@@ -68,7 +72,7 @@ int getGameState(struct gameState *state, struct gameState *testState)
 
 	int coins;
 	int coinValue;
-	int seed = rand() % 1000;
+	int seed = rand() % 7000;
 	//int currentPlayer = rand() % numPlayers;
 	int* k = getKingdomCards(10, adventurer);
 	// initialize a game state and player cards

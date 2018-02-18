@@ -14,6 +14,11 @@
 #include <time.h>
 
 int main() {
+
+	time_t t;
+
+	srand((unsigned)time(&t));
+
 	randomTestcard1();
 	randomTestcard2();
 	randomTestcard3();
