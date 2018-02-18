@@ -51,6 +51,22 @@ int gameStateValidator(struct gameState *state, struct gameState *testState) {
 	return 0;
 }
 
+int numOfCoins(int coin, struct gameState *state, int p) {
+	int count = 0;
+	int i;
+
+	for (i = 0; i < MAX_HAND; i++) {
+		if (state->hand[p][i] == coin) {
+			count++;
+		}
+		if (state->hand[p][i] == -1) {
+			break;
+		}
+	}
+
+	return count;
+}
+
 int setPlayedGameState() {
 	return 0;
 }
