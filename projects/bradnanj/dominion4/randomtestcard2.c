@@ -11,7 +11,7 @@
 int randomTestcard2() {
 	int testsPassed = 0;
 	int i, j, m;			//counters
-	int choice1, choice3, bonus, handpos, deckpos = 0;
+	int choice1, choice2, choice3, bonus, handpos, deckpos = 0;
 	//time_t t;
 	int card1, card2;
 	//int oldHandCount, expectedDiscardCount;
@@ -22,6 +22,7 @@ int randomTestcard2() {
 	int returnVal;
 	int treasure, affordable;  //booleans
 	//srand((unsigned)time(&t));
+	int coins[3] = { 4, 5, 6 };
 
 	struct gameState state, testState;
 	for (i = 0; i < 1000; i++) {
@@ -30,12 +31,13 @@ int randomTestcard2() {
 		handpos = randRange(0, state.handCount[currentPlayer]-1);
 		treasure = isTreasure(&state, currentPlayer, handpos);
 		card1 = state.hand[currentPlayer][handpos];
-		deckpos = randRange(0, state.deckCount[currentPlayer] - 1);
-		card2 = state.deck[currentPlayer][deckpos];
+		//deckpos = randRange(0, state.deckCount[currentPlayer] - 1);
+		//card2 = state.deck[currentPlayer][deckpos];
+		choice2 = coins[randRange(0, 2)];
 
-		affordable = !(getCost(state->hand[currentPlayer][choice1]) + 3) > getCost(choice2);
+		affordable = !(getCost(state.hand[currentPlayer][handpos]) + 3) > getCost(deckpos);
 
-		returnVal = cardEffect(mine, choice1, deckpos, choice3, &testState, handpos, &bonus);
+		returnVal = cardEffect(mine, choice1, choice2, choice3, &testState, handpos, &bonus);
 		if (returnVal == -1 && treasure == 0) {
 			printf("Test PASS with non treasure card drawn.\n");
 		}
@@ -47,7 +49,7 @@ int randomTestcard2() {
 		}
 		else {
 			printf("Test FAIL\n");
-			if (returnVal != 0) {
+			/*if (returnVal != 0) {
 				printf("\t Call to cardEffect for mine returned failure.\n");
 			}
 			if (state.handCount[currentPlayer] != oldHandCount + 2) {
@@ -55,7 +57,7 @@ int randomTestcard2() {
 			}
 			if (expectedDiscardCount != state.discardCount[currentPlayer]) {
 				printf("\t Incorrect discard count after play.   Discard count expected to be %d and it was %d.\n", expectedDiscardCount, state.discardCount[currentPlayer]);
-			}
+			}*/
 		}
 	}
 	
