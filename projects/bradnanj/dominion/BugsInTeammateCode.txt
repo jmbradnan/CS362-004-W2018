@@ -1,0 +1,118 @@
+This report is based upon the Noverse Bug Reporting Template
+
+Bug Report 1
+==============================
+
+Title:    Discard Count not updating properly on playing Adventurer card
+
+Class: Functionality Bug
+
+Date:      March 3 2018     
+Reported By:   bradnanj@oregonstate.edu
+
+
+Product:    Dominion             Version: CS362-400 Winter 2018
+Platform:      Windows           Version: Windows 8
+
+Is it reproducible: Yes 
+
+Description
+===========
+When running unit tests found in cardTest2.c, test output shows failure when validating discard count.    Discard count is never updated (always remains zero) leading to core functionality bug for the Adventurer card.    As a result of this bug, any game where one or more players plays the Adventurer card will produce invalid outcome/gameplay.
+
+
+Steps to Produce/Reproduce
+--------------------------
+1) Run cardtest2 using unittestrunner
+2) run first test of cardtest2 Test 1: pick up two treasure cards (coppers), discard one card.
+
+
+Expected Results
+----------------
+For test 1 the expected discard count should be 1
+
+
+Actual Results
+--------------
+
+From test results console output:
+
+AdventurerCard():  FAIL pick up two treasure cards (coppers), discard one card
+         discard count = 0, expected to be = 1
+         hand count = 8, expected to be = 7
+
+
+Workarounds
+-----------
+
+None
+
+
+Attachments
+None
+-----------
+
+
+
+Other Information
+-----------------
+None
+
+
+Bug Report 2
+==============================
+
+Title:    Hand Count not updating properly on playing Adventurer card
+
+Class: Functionality Bug
+
+Date:      March 3 2018     
+Reported By:   bradnanj@oregonstate.edu
+
+
+Product:    Dominion             Version: CS362-400 Winter 2018
+Platform:      Windows           Version: Windows 8
+
+Is it reproducible: Yes 
+
+Description
+===========
+When running unit tests found in cardTest2.c, test output shows failure when validating hand count.    Hand count is updated incorrectly leading to core functionality bug for the Adventurer card.    As a result of this bug, any game where one or more players plays the Adventurer card will produce invalid outcome/gameplay.
+
+
+Steps to Produce/Reproduce
+--------------------------
+1) Run cardtest2 using unittestrunner
+2) run first test of cardtest2 Test 1: pick up two treasure cards (coppers), discard one card.
+
+
+Expected Results
+----------------
+For test 1 the expected hand count should be 7
+
+
+Actual Results
+--------------
+
+From test results console output:
+
+AdventurerCard():  FAIL pick up two treasure cards (coppers), discard one card
+         discard count = 0, expected to be = 1
+         hand count = 8, expected to be = 7
+
+
+Workarounds
+-----------
+
+None
+
+
+Attachments
+None
+-----------
+
+
+
+Other Information
+-----------------
+
