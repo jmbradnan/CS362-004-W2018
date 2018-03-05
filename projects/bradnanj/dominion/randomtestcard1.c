@@ -29,7 +29,8 @@ int main() {
 
 		oldHandCount = state.handCount[currentPlayer];
 		expectedDiscardCount = discardedCount(&testState, currentPlayer);
-		returnVal = adverturerCard(&state, cardDrawn, temphand, currentPlayer, drawntreasure);
+		//returnVal = adverturerCard(&state, cardDrawn, temphand, currentPlayer, drawntreasure);
+		returnVal = Adventurer(currentPlayer, &state);
 
 		if (returnVal == 0 && state.handCount[currentPlayer] == oldHandCount + 2 && expectedDiscardCount == state.discardCount[currentPlayer] ) {
 			printf("Test PASS\n");

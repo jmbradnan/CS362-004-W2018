@@ -12,8 +12,7 @@
 #include "rngs.h"
 
 int main() {
-	cardtest2();
-	/*
+
 	unittest1();
 	unittest2();
 	unittest3();
@@ -22,5 +21,4 @@ int main() {
 	cardtest2();
 	cardtest3();
 	cardtest4();
-	*/
 }
